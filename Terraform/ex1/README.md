@@ -166,9 +166,12 @@ Declaration of the security group to allow inbound connections on EC2 subnet on 
   }
 ...
 ```
-Here in inbound connections is allowed only TCP ports 5432 and 5433 (default port for postgres and a backup postgres port) from the "Public" subnet (subnet for EC2 machines)
+Here in inbound connections is allowed **only TCP ports 5432 and 5433** (default port for postgres and a backup postgres port) from the "Public" subnet (subnet for EC2 machines)
+All ports, protocols, and IPs are allowed for Outbound connections.
 
-The VPC module will create some values as **Outputs** (Subnets IDs, Security Groups IDs, Internet Gateway, DB Subnet group Name) that will be needed then to create AWS EC2 Instance(s) and RDS machine(s). Thanks to the `modules/vpc/outputs.tf` file where will retrieve those values and stored them inside modules outputs variables. 
+> We are done here for the VPC module source definition...
+
+Now when we will deploy/`apply` the configuration, the VPC module will create some values as **Outputs** (Subnets IDs, Security Groups IDs, Internet Gateway, DB Subnet group Name) that will be needed and reused for the creation of AWS EC2 Instance(s) and RDS machine(s). Thanks to the `modules/vpc/outputs.tf` file where will retrieve those values and stored them inside modules outputs variables. 
 
 The VPC module including all these resources is then called and declared in the main terraform `main.tf` file with the following lines :
 ```terraform

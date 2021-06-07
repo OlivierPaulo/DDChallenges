@@ -1,0 +1,52 @@
+---
+
+- name: add nodejs repo
+  shell: curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash
+
+- name: Install node.js
+  become: yes
+  apt:
+    name:
+      - nodejs
+    state: present
+
+- name: Install ghost-cli
+  become: yes
+  npm:
+    global: yes
+    name: ghost-cli
+    state: present
+
+- name: Create ghost directory
+  file:
+    path: "{{ application_dir }}"
+    state: directory
+    owner: "{{ application_user }}"
+    group: "{{ application_user }}"
+    mode: 0755
+
+- name: installing ghostjs
+  shell: >
+    ghost install
+    --url "https://{{ domain_name }}"
+    --port 2368
+    --db mysql
+    --dbhost "{{ database_host }}"
+    --dbuser "{{ database_user }}"
+    --dbpass "{{ database_password }}"
+    --dbname "{{ database_name }}"
+    --systemd
+    --enable
+    --start
+    --no-setup-nginx
+    --no-setup-ssl
+    --no-prompt
+  args:
+    chdir: "{{ application_dir }}"
+
+- name: Copy nginx app server block
+  become: yes
+  template:
+    src: app.conf
+    dest: /etc/nginx/conf.d/app.conf
+  notify: reload nginx

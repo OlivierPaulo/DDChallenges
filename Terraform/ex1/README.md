@@ -270,3 +270,12 @@ This specify here that we will create our Infrastructure in AWS in region name s
 ## S3 Backend
 
 States of Terraform are stored remotely and encrypted in a S3 bucket.
+
+```terraform
+backend "s3" {
+    bucket  = "dd-op-challenges"
+    key     = "DD-Challenges/tfstate/"
+    region  = "us-west-2"
+    encrypt = true
+}
+```

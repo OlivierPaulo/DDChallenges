@@ -4,7 +4,7 @@
 
 As a reminder, the objective of the exercice is to deploy a ghost blogging platform using Terraform and Ansible.
 
-For this exercice some variables values files were not pushed to GitHub (.gitignore) due to passwords / SSH keys values containes in plain text in those files...
+For this exercice some variables values files were not pushed to GitHub (.gitignore) due to passwords / SSH keys values contained in plain text in those files...
 
 ### Terraform
 

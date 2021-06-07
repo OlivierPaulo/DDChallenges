@@ -1,10 +1,9 @@
 # Terraform Basics
 
-======
 
 As a reminder, the Exercice 1 objective is to deploy the following Infrastructure :
 
-An `AWS` VPC where : 
+An AWS `VPC` where : 
 > Only Ports **80**, **443** and **22** are open to **Internet**.
 > Create an `EC2 machine` (smallest one possible) which has access to an `RDS machine` (db engine : `postgres`, smallest one possible). The RDS machine is not publicly available.
 
@@ -13,7 +12,7 @@ An `AWS` VPC where :
 The VPC module source is fully declared inside `/modules/vpc` folder.
 Inside `modules/vpc/main.tf`, I declared the following __elements__ :
 
-* ### VPC :
+### VPC
 
 ``` 
 resource "aws_vpc" "global" {
@@ -21,7 +20,6 @@ resource "aws_vpc" "global" {
   enable_dns_hostnames = true
   enable_dns_support   = true
 }
-
 ```
 
 Here I declare the CIDR block for my VPC with a `/22` mask :
@@ -31,11 +29,11 @@ Here I declare the CIDR block for my VPC with a `/22` mask :
 
 I have enabled DNS hostnames and support. 
 
-* ### Internet Gateway :
+### Internet Gateway
 
 Declaration of an Internet Gateway to allow my machines access to have Outbound Internet connections.
 
-* ### Route table :
+### Route table
 
 ```
 resource "aws_route_table" "route_table" {
@@ -49,15 +47,15 @@ resource "aws_route_table" "route_table" {
 ```
 Declaration of the route table to link my Internet Gateway with the world `0.0.0.0/0`
 
-* ### Route table association
+### Route table association
 
 Declaration of the route table association where I associate my EC2 subnet to the route table.
 
-* ### Availability zones for subnets
+### Availability zones for subnets
 
 Declaration of the availabilty zones for the subnets (for EC2 and RDS subnets)
 
-* ### "Public" EC2 subnet
+### "Public" EC2 subnet
 
 ```
 resource "aws_subnet" "public" {
@@ -73,7 +71,7 @@ Declaration of the `/23` subnet for my EC2 machines `10.0.0.0 -> 10.0.1.255` wit
 - automatic map of public IP on launch (related to Elastic IP).
 - dependancy on the Internet Gateway.
 
-* ### "Private" RDS subnets
+### "Private" RDS subnets
 
 Here I have declared two `/24` subnets for RDS machine(s) `10.0.2.0 -> 10.0.2.255` and `10.0.3.0 -> 10.0.3.255`. Each subnet has its own availability zone :
 
@@ -83,17 +81,16 @@ resource "aws_subnet" "private1" {
   cidr_block        = "10.0.2.0/24"
   availability_zone = data.aws_availability_zones.available.names[1]
 }
-...
+
 # Declare second private subnet for RDS machine(s)"
 resource "aws_subnet" "private2" {
   vpc_id            = aws_vpc.global.id
   cidr_block        = "10.0.3.0/24"
   availability_zone = data.aws_availability_zones.available.names[2]
 }
-
 ```
 
-* ### DB Subnet Group
+### DB Subnet Group
 
 ```
 resource "aws_db_subnet_group" "rds_subnet_group" {
@@ -104,7 +101,7 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
 
 Declaration of the DB subnet group with the 2 "private" subnets created for RDS machine(s).
 
-* ### Security Groups
+### Security Groups
 
 - Security Group for EC2 subnet
 

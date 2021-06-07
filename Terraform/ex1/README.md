@@ -1,5 +1,6 @@
 # Terraform Basics
 
+## Exercice 1
 
 As a reminder, the Exercice 1 objective is to deploy the following Infrastructure :
 

@@ -14,7 +14,7 @@ Inside `modules/vpc/main.tf`, I declared the following __elements__ :
 
 ### VPC
 
-``` 
+```terraform 
 resource "aws_vpc" "global" {
   cidr_block           = "10.0.0.0/22"
   enable_dns_hostnames = true

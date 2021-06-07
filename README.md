@@ -18,8 +18,7 @@ The *Terraform* folder contains code to cover the two following exercices.
 Here, the objective is to fully create, using _Terraform_, an infrastructure containing the following elements :
 
 An AWS `VPC` where : 
-> Only Ports **80**, **443** and **22** are open to **Internet**.
-  > Create an `EC2 machine` (smallest one possible) which has access to an `RDS machine` (db engine : `postgres`, smallest one possible). The RDS machine is not publicly available.
+> Only Ports **80**, **443** and **22** are open to **Internet**. Create an `EC2 machine` (smallest one possible) which has access to an `RDS machine` (db engine : `postgres`, smallest one possible). The RDS machine is not publicly available.
 
 You will find in this [README](https://github.com/OlivierPaulo/DDChallenges/tree/main/Terraform/ex1#terraform-basics) the explanation on how I build this infrascture using Terraform
 

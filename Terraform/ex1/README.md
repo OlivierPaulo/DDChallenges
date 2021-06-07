@@ -35,7 +35,7 @@ Declaration of an Internet Gateway to allow my machines access to have Outbound 
 
 ### Route table
 
-```
+```terraform
 resource "aws_route_table" "route_table" {
   vpc_id = aws_vpc.global.id
 
@@ -45,6 +45,7 @@ resource "aws_route_table" "route_table" {
   }
 }
 ```
+
 Declaration of the route table to link my Internet Gateway with the world `0.0.0.0/0`
 
 ### Route table association
@@ -57,7 +58,7 @@ Declaration of the availabilty zones for the subnets (for EC2 and RDS subnets)
 
 ### "Public" EC2 subnet
 
-```
+```terraform
 resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.global.id
   cidr_block              = "10.0.0.0/23"
@@ -66,6 +67,7 @@ resource "aws_subnet" "public" {
   depends_on              = [aws_internet_gateway.gw]
 }
 ```
+
 Declaration of the `/23` subnet for my EC2 machines `10.0.0.0 -> 10.0.1.255` with :
 - one availabity zone for this subnet.
 - automatic map of public IP on launch (related to Elastic IP).
@@ -75,7 +77,7 @@ Declaration of the `/23` subnet for my EC2 machines `10.0.0.0 -> 10.0.1.255` wit
 
 Here I have declared two `/24` subnets for RDS machine(s) `10.0.2.0 -> 10.0.2.255` and `10.0.3.0 -> 10.0.3.255`. Each subnet has its own availability zone :
 
-```
+```terraform
 resource "aws_subnet" "private1" {
   vpc_id            = aws_vpc.global.id
   cidr_block        = "10.0.2.0/24"
@@ -92,7 +94,7 @@ resource "aws_subnet" "private2" {
 
 ### DB Subnet Group
 
-```
+```terraform
 resource "aws_db_subnet_group" "rds_subnet_group" {
   name       = "db_subnet_group"
   subnet_ids = [aws_subnet.private1.id, aws_subnet.private2.id]
@@ -107,7 +109,7 @@ Declaration of the DB subnet group with the 2 "private" subnets created for RDS 
 
 Declaration of the security group to allow inbound connections on EC2 subnet on only TCP ports 443 (HTTPS), 80 (HTTP), 22 (SSH). Regarding Outbound connections, all ports, all protocols and all Internet IPs are allowed. 
 
-```
+```terraform
 ...
   ingress {
     description = "Allow TLS (HTTPS) Connections"
@@ -143,7 +145,7 @@ Declaration of the security group to allow inbound connections on EC2 subnet on 
 
 - Security Group for RDS subnets
 
-```
+```terraform
 ...
   # Only ports 5432 & 5433 are allowed from EC2 subnet to RDS subnets
   ingress {
@@ -168,7 +170,7 @@ Here in inbound connections is allowed only TCP ports 5432 and 5433 (default por
 The VPC module will create some values as **Outputs** (Subnets IDs, Security Groups IDs, Internet Gateway, DB Subnet group Name) that will be needed then to create AWS EC2 Instance(s) and RDS machine(s). Thanks to the `modules/vpc/outputs.tf` file where will retrieve those values and stored them inside modules outputs variables. 
 
 The VPC module including all these resources is then called and declared in the main terraform `main.tf` file with the following lines :
-```
+```terraform
 module "vpc" {
   source = "./modules/vpc"
 }
@@ -178,7 +180,7 @@ This main terraform `main.tf` file also included the rest of the main configurat
 
 ## The EC2 Instance
 
-```
+```terraform
 resource "aws_instance" "public-ec2" {
   ami                    = "ami-0fc272c9b2d204826" ## AMI-ID for Ubuntu 20.04 LTS
   instance_type          = var.instance_type
@@ -193,7 +195,7 @@ Subnet ID and Security Group ID are retrieved from our VPC module outputs variab
 
 ## Elastic IP for EC2
 
-```
+```terraform
 resource "aws_eip" "elastic_ip" {
   instance                  = aws_instance.public-ec2.id
   vpc                       = true
@@ -206,7 +208,7 @@ Declaration and allocation of the Elastic IP (public Internet IP) to our EC2 ins
 
 ## The RDS machine
 
-```
+```terraform
 resource "aws_db_parameter_group" "db_parameter_group" {
   name   = "parametergroup"
   family = "postgres13"
@@ -242,7 +244,7 @@ Creation of the RDS machine inside the postgres13 family with :
 
 ## S3 Bucket
 
-```
+```terraform
 resource "aws_s3_bucket" "terraform_state_s3" {
   bucket        = "dd-op-challenges"
   versioning {

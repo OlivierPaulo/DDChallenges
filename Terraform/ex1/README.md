@@ -5,7 +5,7 @@ As a reminder, the Exercice 1 objective is to deploy the following Infrastructur
 
 An AWS `VPC` where : 
 > Only Ports **80**, **443** and **22** are open to **Internet**.
-> Create an `EC2 machine` (smallest one possible) which has access to an `RDS machine` (db engine : `postgres`, smallest one possible). The RDS machine is not publicly available.
+  Create an `EC2 machine` (smallest one possible) which has access to an `RDS machine` (db engine : `postgres`, smallest one possible). The RDS machine is not publicly available.
 
 ## The VPC Module
 
@@ -25,7 +25,7 @@ resource "aws_vpc" "global" {
 Here I declare the CIDR block for my VPC with a `/22` mask :
 - to have 1024 IPs addresses on my private network. 
 - to create after 1 `/23` mask subnet for my EC2 future machine(s).
-- to create after 2 `/24` mask subnets for my RDS futre machine(s). The RDS machines will need 2 subnets and 2 availability zones.
+- to create after 2 `/24` mask subnets for my RDS future machine(s). The RDS machines will need 2 subnets and 2 availability zones.
 
 I have enabled DNS hostnames and support. 
 
@@ -234,4 +234,37 @@ resource "aws_db_instance" "rds_postgre_db" {
 
 Creation of the RDS machine inside the postgres13 family with :
 - version 13.1
-- 
+- db.t3.micro instance class
+- 5 GB of allocated storage
+- username and password
+- Subnet Group name, Security Group ID (coming from modules outputs)
+- paramater group defined above
+
+## S3 Bucket
+
+```
+resource "aws_s3_bucket" "terraform_state_s3" {
+  bucket        = "dd-op-challenges"
+  versioning {
+    enabled = true
+  }
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
+}
+```
+
+Creation of the S3 bucket with server side encryption using AES256 algorithm.
+
+## AWS Provider
+
+This specify here that we will create our Infrastructure in AWS in region name selected. I have selected to create all the resource in `us-west-2`.
+
+## S3 Backend
+
+States of Terraform are stored remotely and encrypted in a S3 bucket.

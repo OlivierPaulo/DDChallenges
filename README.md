@@ -1,7 +1,7 @@
 # Infrastructure as a Code
 
 
-This repo contains some exercices related to Infrastucture as a code products as `Terraform` and `Ansible`
+This repo contains Infrastucture as a Code exercices using products as `Terraform` and `Ansible`
 
 
 # Table of Contents
@@ -15,11 +15,11 @@ The *Terraform* folder contains code to cover the two following exercices.
 
 ### Exercice 1 (ex1)
 
-Here, the objective is to fully create using _Terraform_ an infrastructure containing the following elements :
+Here, the objective is to fully create, using _Terraform_, an infrastructure containing the following elements :
 
 An AWS `VPC` where : 
 > Only Ports **80**, **443** and **22** are open to **Internet**.
-> Create an `EC2 machine` (smallest one possible) which has access to an `RDS machine` (db engine : `postgres`, smallest one possible). The RDS machine is not publicly available.
+  Create an `EC2 machine` (smallest one possible) which has access to an `RDS machine` (db engine : `postgres`, smallest one possible). The RDS machine is not publicly available.
 
 You will find in this [README](https://github.com/OlivierPaulo/DDChallenges/tree/main/Terraform/ex1#terraform-basics) the explanation on how I build this infrascture using Terraform
 
@@ -27,8 +27,7 @@ You will find in this [README](https://github.com/OlivierPaulo/DDChallenges/tree
 
 Here, the objective is to add names to all the ressources created on Exercice 1.
 
-You will find in this [README](https://github.com/OlivierPaulo/DDChallenges/tree/main/Terraform/ex2#terraform-basics) the explanation on how I build on how I build this infrascture using Terraform.
-
+You will find in this [README](https://github.com/OlivierPaulo/DDChallenges/tree/main/Terraform/ex2#terraform-basics) the explanation on how I build this infrascture using Terraform.
 
 
 ## Ansible-basics

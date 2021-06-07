@@ -35,3 +35,5 @@ override.tf.json
 
 # tfvars files
 *.tfvars
+
+Ansible/ex2

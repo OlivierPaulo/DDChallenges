@@ -269,7 +269,7 @@ Creation of the S3 bucket with server side encryption using AES256 algorithm.
 
 ## AWS Provider
 
-This specify here that we will create our Infrastructure in AWS in region name selected. I have selected to create all the resource in `us-west-2`.
+This specify here that we will create our Infrastructure in AWS in region name selected. Please notice that I have selected to create all the resource in `us-west-2` region.
 
 ## S3 Backend
 
